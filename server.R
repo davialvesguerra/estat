@@ -36,11 +36,12 @@ server <- function(input, output) {
     })
     
     
-    output$contents <- DT::renderDataTable({
+    output$contents <- renderDT({
         
         DT::datatable(
             data(),
             filter = 'top', extensions = c('Buttons', 'Scroller'),
+            rownames = FALSE,
             options = list(scrollY = 200,
                            scrollX = 500,
                            deferRender = TRUE,
@@ -50,20 +51,20 @@ server <- function(input, output) {
                            buttons = list('excel',
                                           list(extend = 'colvis', targets = 0, visible = F)),
                            
-                           fixedColumns = TRUE), 
-            rownames = FALSE)
+                           fixedColumns = TRUE)
+        )
     })
     
     
     output$plot <- renderPlot(
-        
         data() %>% 
             group_by(idade) %>% 
             summarise(n = n()) %>% 
             ggplot(aes(idade,n))+
             geom_col()
-        
-  
     )
+    
+    
+    
     
 }
