@@ -9,20 +9,58 @@
 
 library(shiny)
 
-# Define UI for application that draws a histogram
-ui <- fluidPage(
-    sidebarLayout(
-        sidebarPanel(
-            fileInput("file1", "Choose CSV File",
-                      accept = c(
-                          "text/csv",
-                          "text/comma-separated-values,text/plain",
-                          ".csv")
+
+
+
+library(shinydashboard)
+
+ui <- dashboardPage(
+    dashboardHeader(),
+    dashboardSidebar(
+        sidebarMenu(id="tabs",
+                    menuItem("Table import", tabName = "table", icon=icon("table"), selected=TRUE),
+                    menuItem("Plot", tabName="plot", icon=icon("line-chart")))
+                    
+        ),
+    dashboardBody(
+    
+        tabItems(
+        tabItem(
+            tabName = "table",
+            fluidRow(
+                box(title = "Unidade", solidHeader = TRUE, 
+                    status = "primary", width = 4,
+                    fileInput("file1", "Choose CSV File",
+                              accept = c(
+                                  "text/csv",
+                                  "text/comma-separated-values,text/plain",
+                                  ".csv"))),
+                box(title = "Unidade", solidHeader = TRUE, 
+                    status = "primary", width = 8,
+                    DTOutput("contents"))
             )
         ),
-        mainPanel(
-            dataTableOutput("contents"),
-            plotOutput("plot")
+        
+        
+        tabItem(
+            tabName = "plot",
+            fluidRow(
+                box(title = "Unidade", solidHeader = TRUE, 
+                    status = "primary", width = 4,
+                    plotOutput("plot"))
+            )
         )
+       )
+        
     )
+    
+    
+    
 )
+
+
+
+
+
+
+
