@@ -14,10 +14,7 @@ setwd("C:/Users/601545/Desktop/projetos/estat/shiny/")
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
 
-
-pacman::p_load("tidyverse","ggplot2","stringr","read.dbc","lubridate","shinydashboard","plotly","DT","wesanderson")
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
@@ -56,13 +53,27 @@ server <- function(input, output) {
     })
     
     
-    output$plot <- renderPlot(
+    plotInput <- function(){
         data() %>% 
             group_by(idade) %>% 
             summarise(n = n()) %>% 
             ggplot(aes(idade,n))+
             geom_col()
-    )
+    }
+    
+    
+    
+    output$plot <- renderPlot({  plotInput() })
+    
+    
+    
+    output$downloadPlot <- downloadHandler(
+        filename = "Shinyplot.png",
+        content = function(file) {
+            png(file)
+            plotInput()
+            dev.off()
+        })   
     
     
     
